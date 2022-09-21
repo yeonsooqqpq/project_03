@@ -1,0 +1,262 @@
+main {
+    @include clearfix();
+    .section-about {
+      padding: 7rem 0 6.5rem 6rem;
+      width: 66.66666%;
+      min-height: 42rem;
+      float: left;
+  
+      @include clearfix();
+      @include mq("small-screen-1") {
+        width: 100%;
+      }
+      @include mq("small-screen-2") {
+        width: 100%;
+        height: 54rem;
+        padding: 7rem 6rem 6.5rem 6rem;
+      }
+      @include mq("small-screen-3") {
+        width: 100%;
+        height: 64rem;
+        padding: 7rem 6rem 6.5rem 6rem;
+      }
+      &-words {
+        width: 65%;
+        padding: 2rem 2rem 0 0;
+        float: left;
+        @include mq("small-screen-2") {
+          width: 100%;
+        }
+        @include mq("small-screen-3") {
+          width: 100%;
+        }
+        p {
+          padding: 1.5rem 0;
+          font-size: 1.4rem;
+          font-weight: 700;
+          text-align: justify;
+        }
+      }
+      &-photo {
+        position: relative;
+        width: 35%;
+        float: left;
+  
+        @include mq("small-screen-2") {
+          width: 100%;
+        }
+        @include mq("small-screen-3") {
+          width: 100%;
+        }
+        .photo {
+          position: absolute;
+          width: 18rem;
+          height: 12rem;
+          transition: all 0.5s;
+          @include mq("small-screen-2") {
+            top: 3rem !important;
+            left: 50% !important;
+          }
+          @include mq("small-screen-3") {
+            top: 3rem !important;
+            left: 50% !important;
+          }
+          &:hover {
+            transform: scale(1.1);
+            padding: 1rem;
+            border: 3px solid $color-primary;
+            z-index: 10;
+          }
+          &:nth-child(1) {
+            left: 0rem;
+            top: -10rem;
+            @include mq("small-screen-2") {
+              transform: translateX(-120%);
+            }
+            @include mq("small-screen-3") {
+              transform: translateX(-120%);
+            }
+          }
+          &:nth-child(2) {
+            left: -10rem;
+            top: 0rem;
+          }
+          &:nth-child(3){
+            left: 10rem;
+            top: 0rem;
+          }
+          &:nth-child(4){
+            left: 10rem;
+            top: 12rem;
+          }
+          &:nth-child(5){
+            left: -10rem;
+            top: 12rem;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            box-shadow: 3px 3px 9px 0 rgba(0, 0, 0, 0.5);
+          }
+        }
+      }
+    }
+    .section-etc {
+      width: 33.33334%;
+      float: left;
+      @include mq("small-screen-1") {
+        width: 100%;
+      }
+      @include mq("small-screen-2") {
+        width: 100%;
+      }
+      @include mq("small-screen-3") {
+        width: 100%;
+      }
+      [class^="etc-"] {
+        height: 14rem;
+      }
+      .etc {
+        @include clearfix();
+        @include mq("small-screen-1") {
+          width: 33.33333%;
+          float: left;
+        }
+        @include mq("small-screen-2") {
+          width: 33.33333%;
+          float: left;
+          height: 22rem;
+        }
+        &:nth-child(1) {
+          background: url(/images/daniel_eyes.jpg) no-repeat center -300px ;
+        }
+        &:nth-child(2) {
+          background: url(/images/haerin_eyes_4.jpg) no-repeat center -1110px ;
+        }
+        &:nth-child(3) {
+          background: url(/images/hani_eyes.jpg)no-repeat center -1100px ;
+        }
+        .etc-icon {
+          padding-top: 3.5rem;
+          width: 30%;
+          text-align: center;
+          float: left;
+          span {
+            font-size: 6rem;
+          }
+        }
+        .etc-text{
+            padding-top: 1rem;
+            width: 70%;
+            float: left;
+            p{
+                margin: 0.5rem 0;
+                padding-right: 3.5rem;
+                text-align: justify;
+                font-size: 1.4rem;
+            }
+        }
+      }
+    }
+
+
+    .section-profile{
+      padding: 9rem 7rem 3rem 7rem;
+      width: 100%;
+      // min-height: 45rem;
+      height: 800px;
+      float: left;
+      background: $color-blue-1;
+      @include clearfix();
+      @include mq("small-screen-1") {
+        width: 100%;
+      }
+      @include mq("small-screen-2") {
+        width: 100%;
+        height: 54rem;
+        padding: 7rem 6rem 6.5rem 6rem;
+      }
+      @include mq("small-screen-3") {
+        width: 100%;
+        height: 64rem;
+        padding: 7rem 6rem 6.5rem 6rem;
+      }
+     
+      .profile-members{
+        position: relative;
+        width: 100%;
+
+        // @include mq("small-screen-2") {
+        //   width: 100%;
+        // }
+        // @include mq("small-screen-3") {
+        //   width: 100%;
+        }
+      //   .profile-photo {
+      //     position: absolute;
+      //     // width: 20rem;
+      //     // height: 20rem;
+      //     top: 10px;
+      //     left: 300px;
+      //     // float: left;
+      //     margin: 100px;
+         
+      //     transition: all 0.5s;
+      //     @include mq("small-screen-2") {
+      //       top: 3rem !important;
+      //       left: 50% !important;
+      //     }
+      //     @include mq("small-screen-3") {
+      //       top: 3rem !important;
+      //       left: 50% !important;
+      //     }
+      // }
+      .profile-photo li{
+        float: left;
+        padding: 80px;
+        h3,p{
+          text-align: center;
+        }
+        img {
+          width: 300px;
+          height: 400px;
+          box-sizing: border-box;
+          box-shadow: 3px 3px 9px 0 rgba(11, 77, 177, 0.5);
+          margin-top: 15px;
+        }
+      } 
+      
+      //   &:nth-child(1) {
+      //     left: 100rem;
+      //     top: -10rem;
+      //     @include mq("small-screen-2") {
+      //       transform: translateX(-120%);
+      //     }
+      //     @include mq("small-screen-3") {
+      //       transform: translateX(-120%);
+      //     }
+      //   }
+      //   &:nth-child(2) {
+      //     left: -10rem;
+      //     top: 0rem;
+      //   }
+      //   &:nth-child(3){
+      //     left: 10rem;
+      //     top: 0rem;
+      //   }
+      //   &:nth-child(4){
+      //     left: 10rem;
+      //     top: 12rem;
+      //   }
+      //   &:nth-child(5){
+      //     left: -10rem;
+      //     top: 12rem;
+      //   }
+      
+      // }
+    }
+
+  
+
+  }

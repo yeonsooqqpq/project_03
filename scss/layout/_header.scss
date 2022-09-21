@@ -1,0 +1,96 @@
+header {
+  // width: 100%;
+  // height: 120vh;
+  // background-image:
+  //   url(/images/main.jpg);
+  // background-size: cover;
+  // background-blend-mode: multiply;
+  position: relative;
+  .logo-text {
+    position: absolute;
+    left: 30rem;
+    top: -200rem;
+    font-size: 1rem;
+    color: $color-primary;
+    letter-spacing: -0.1rem;
+
+    animation-name: moveInLeft;
+    animation-duration: 1s;
+    animation-iteration-count: 5;
+    animation-delay: 2s;
+    animation-fill-mode: backwards;
+  }
+  .header-text {
+    position: absolute;
+    left: 7rem;
+    top: -300px;
+    color:$color-white;
+    letter-spacing:-.1rem;
+    font-weight:700;
+    &-main{
+      font-size:7.2rem;
+      line-height: 7.2rem;
+      
+      animation-name:moveInRight;
+      animation-duration:1s;
+      animation-delay:1s;
+      animation-fill-mode:backwards;
+
+    }
+    &-sub{
+      margin-top:3rem;
+      font-size:2.4rem;
+
+      animation-name:moveInLeft;
+      animation-duration:1s;
+      animation-delay:1.5s;
+      animation-fill-mode:backwards;
+    }
+  }
+  .top-menu a{
+  text-decoration: none;
+    color: $color-white;}
+    .top-menu h3{
+        color: $color-white;}
+}
+
+
+// 슬라이드
+#brandVisual {
+  position: relative;
+  width:100%; 
+  overflow: hidden;
+  height:1200px;
+}
+#brandVisual .visual_slide li a{
+  display: block;
+  text-indent: -99999px;
+}
+#brandVisual .visual_slide{
+  width: 100%;
+  height: 100%;
+}
+#brandVisual .visual_slide li{
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position:50% 0 ;
+  width:100%;
+  height:100%;
+  background-size:cover;
+}
+#brandVisual .visual_slide li.visual_0{background-image:url(/images/main.jpg);}
+#brandVisual .visual_slide li.visual_1{background-image:url(/images/main_2.jpg);}
+#brandVisual .visual_slide li.visual_2{background-image:url(/images/main_3.jpg);}
+#brandVisual .visual_slide li.visual_3{background-image:url(/images/main_4.jpg);}
+#brandVisual .visual_slide li.visual_4{background-image:url(/images/main_5.jpg);}
+/* controls */
+.btnImg{
+  position: relative;
+  width: 90%; height:30px;
+  margin: auto;
+  top: -480px;
+  }
+.btnImg img{width: 30px;}
+.btnImg .prev{/* position: absolute; */left: 100px;}
+.btnImg .next{position: absolute; right: 100px;}
+

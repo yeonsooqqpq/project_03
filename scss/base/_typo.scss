@@ -1,0 +1,41 @@
+h2 {
+  padding: 1rem 0;
+  font-size: 2.4rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  background: linear-gradient(to left, $color-primary, $color-secondary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.5s;
+
+  &:hover {
+    padding-left: 1.5rem;
+  }
+}
+
+h3 {
+  padding: 0.5rem 0;
+  color: $color-grey-light;
+  font-size: 1.6rem;
+  font-weight:700;
+  text-transform:uppercase;
+ 
+}
+.header-text-sub > p{
+  line-height: 50px;
+}
+.etc-text h3 > p {
+  color: $color-grey-light;
+}
+
+.profile-member > h3{
+  font-size: 2.5rem;
+  color: $color-blue-dark;
+}
+
+.profile-member > p{
+  color: $color-primary;
+  font-size: 2rem;
+}
+

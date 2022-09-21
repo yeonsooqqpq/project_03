@@ -1,0 +1,86 @@
+@charset "utf-8";
+
+/*김단희-인쇄관련*/
+
+@page {size: a4; page-break-before: always; margin: 1.4cm; width:21cm; height:29.7cm;}
+
+@media print{
+	*{word-wrap: break-word; word-break: break-all;}
+	#printPopup{font-family:'굴림', 'Gulim' !important; margin: 0; border: initial; border-radius: initial; width: initial; min-height: initial; box-shadow: initial; background: initial; page-break-after: always; page-break-inside: avoid;}
+	.audio-button-box {display:none!important;}
+	#printnewsTitle{font-size: 22pt !important; font-weight: bold; letter-spacing: -0.07em;}
+	#printnewsTitle a{ text-decoration: none;}
+	#printnewsSubTitle{font-size: 21pt !important; font-weight: bold; letter-spacing: -0.07em; padding-top:15px; color:#666;}
+	#printnewsText{padding: 20pt 0; font-size: 19pt !important; line-height: 33pt;}
+	#printnewsInfo{width: 100%; font-size: 15px; border-top: 1px solid #bfbfbf; border-bottom: 1px solid #bfbfbf; background-color: #f2f2f2; padding: 7pt 15pt; color: #454545; font-weight: bold;}
+	#printnewsInfo span{margin-right:20pt; display:inline-block;}
+	#printPopup table{width:100%; border:1pt solid gray; border-collapse: collapse; border-spacing: 0; page-break-inside: avoid;}
+	#printPopup th,
+	#printPopup td{border:1pt solid gray; padding:3pt 8pt;}
+	#printnewsText div{page-break-inside: auto;  white-space: normal;}
+	#printnewsText div p{page-break-inside: auto;  white-space: pre-line;}
+
+	/* 회의자료 - 이영선 */
+	.upt, .new_left_pannel, .new_header, .meeting.search_form, .meeting_data, .page_title{ display:none !important;}
+	#printMeetingList { width:100%; border-top:1px solid #bbb; }
+	#printMeetingList .btn-tag { display:none;}
+	#printMeetingList #printnewsTitle { font-size:12pt !important; padding:5pt 0 0 !important; margin:0 !important;}
+	#printMeetingList #printnewsText { font-size:10pt !important; line-height:12pt !important; padding:0 0 5pt !important; margin:0 !important;}
+	#printMeetingList .meeting_info { font-size:5pt !important; line-height:12pt !important; padding:0 !important; margin:0 !important;}
+	#printMeetingList .meeting_info > span { padding:0 6pt 0 0;}
+	#printMeetingList .status {font-weight:bold;}
+	#printMeetingList .status.status02 {color:#fabf4b ;} /* 준비 */
+	#printMeetingList .status.status03 {color:#1ac336 ;} /* 진행 */
+	#printMeetingList .status.status04 {color:#bbb;} /* 미사용 */
+	#printMeetingList .status.status05 {color:#3498db ;} /* 완료 */
+	#printMeetingList .status.status06 {color:#bbb;} /* 취소 */
+	#printMeetingList .importance span {display: inline-block; padding: 0 10pt; border-radius: 12pt;color: #000 !important;}
+    #printMeetingList .importance .plan {background:#ff3802 ; border:1px solid #be2006 }
+    #printMeetingList .importance .high {background:#0486ff ; border:1px solid #0065c2 }
+    #printMeetingList .importance .midium {background:#1ac336 ; border:1px solid #0fa528 ; }
+    #printMeetingList .importance .low {background:#fcaf17 ; border:1px solid #db9100 }
+    #printMeetingList .form-group {padding-bottom:20px;border-bottom:1px solid #bebebe ;}
+}@charset "utf-8";
+
+/*김단희-인쇄관련*/
+
+@page {size: a4; page-break-before: always; margin: 1.4cm; width:21cm; height:29.7cm;}
+
+@media print{
+	*{word-wrap: break-word; word-break: break-all;}
+	#printPopup{font-family:'굴림', 'Gulim' !important; margin: 0; border: initial; border-radius: initial; width: initial; min-height: initial; box-shadow: initial; background: initial; page-break-after: always; page-break-inside: avoid;}
+	#printnewsTitle{font-size: 22pt !important; font-weight: bold; letter-spacing: -0.07em;}
+	#printnewsSubTitle{font-size: 21pt !important; font-weight: bold; letter-spacing: -0.07em; padding-top:15px; color:#666;}
+	#printnewsText{padding: 20pt 0; font-size: 19pt !important; line-height: 33pt;}
+	#printnewsInfo{width: 100%; font-size: 15px; border-top: 1px solid #bfbfbf; border-bottom: 1px solid #bfbfbf; background-color: #f2f2f2; padding: 7pt 15pt; color: #454545; font-weight: bold;}
+	#printnewsInfo span{margin-right:20pt; display:inline-block;}
+	#printPopup table{width:100%; border:1pt solid gray; border-collapse: collapse; border-spacing: 0; page-break-inside: avoid;}
+	#printPopup th,
+	#printPopup td{border:1pt solid gray; padding:3pt 8pt;}
+	#printnewsText div{page-break-inside: auto;  white-space: normal;}
+	#printnewsText div p{page-break-inside: auto;  white-space: pre-line;}
+
+	/* 회의자료 - 이영선 */
+	.upt, .new_left_pannel, .new_header, .meeting.search_form, .meeting_data, .page_title{ display:none !important;}
+	#printMeetingList { width:100%; border-top:1px solid #bbb; }
+	#printMeetingList .btn-tag { display:none;}
+	#printMeetingList #printnewsTitle { font-size:12pt !important; padding:5pt 0 0 !important; margin:0 !important;}
+	#printMeetingList #printnewsText { font-size:10pt !important; line-height:12pt !important; padding:0 0 5pt !important; margin:0 !important;}
+	#printMeetingList .meeting_info { font-size:5pt !important; line-height:12pt !important; padding:0 !important; margin:0 !important;}
+	#printMeetingList .meeting_info > span { padding:0 6pt 0 0;}
+	#printMeetingList .status {font-weight:bold;}
+	#printMeetingList .status.status02 {color:#fabf4b ;} /* 준비 */
+	#printMeetingList .status.status03 {color:#1ac336 ;} /* 진행 */
+	#printMeetingList .status.status04 {color:#bbb;} /* 미사용 */
+	#printMeetingList .status.status05 {color:#3498db ;} /* 완료 */
+	#printMeetingList .status.status06 {color:#bbb;} /* 취소 */
+	#printMeetingList .importance span {display: inline-block; padding: 0 10pt; border-radius: 12pt;color: #000 !important;}
+    #printMeetingList .importance .plan {background:#ff3802 ; border:1px solid #be2006 }
+    #printMeetingList .importance .high {background:#0486ff ; border:1px solid #0065c2 }
+    #printMeetingList .importance .midium {background:#1ac336 ; border:1px solid #0fa528 ; }
+    #printMeetingList .importance .low {background:#fcaf17 ; border:1px solid #db9100 }
+    #printMeetingList .form-group {padding-bottom:20px;border-bottom:1px solid #bebebe ;}
+
+	/* 지면편집 - 이영선 */
+	#artpapereditPrint { font-family:'굴림','Gulim';}
+}

@@ -1,0 +1,171 @@
+(function ($, window, document) {
+
+    $.fn.articleQuizInit = function (options) {
+
+        var finish = function () {
+            $('div.ab_quiz').find('.quiz_finish_btn').off().on('click', function (event) {
+
+                var $quizDiv = $(this).closest('div.ab_quiz');
+                var quizCnt = $quizDiv.data('quizcnt');
+                $(this).closest('div.quiz_question_screen').hide();
+
+                var resultType = $quizDiv.find('.quiz_result_type').html();
+                var quizResult = $quizDiv.data('quizresult');
+                var correctCnt = quizResult.split(',').filter(function (val) {return val == 'Y';}).length;
+
+                var correctPercent = (correctCnt / quizCnt) * 100;
+                var gradeClass = 'quiz_grade';
+                var gradeText = 'Thank You!';
+                var resultText = '';
+                if (resultType == 'A') {
+                    if (correctPercent >= 80) {
+                        gradeClass += '_a';
+                        gradeText = '와우 전문가~!';
+                    } else if (correctPercent >= 40) {
+                        gradeClass += '_b';
+                        gradeText = '나쁘지 않아요!';
+                    } else {
+                        gradeClass += '_c';
+                        gradeText = '힘을 내요!';
+                    }
+                    resultText = '적중';
+                } else {
+                    resultText = '정답';
+                }
+                var $resultTarget = $quizDiv.find('.quiz_result_screen');
+                $resultTarget.addClass(gradeClass);
+                $resultTarget.find('.quiz_result').html(gradeText);
+                $resultTarget.find('.quiz_score').html('');
+                $resultTarget.find('.quiz_score').append('<span><em>'+quizCnt+'</em>문제 중 <em>'+correctCnt+'</em>문제 '+resultText+'!</span>');
+
+                // try {
+                //     jatracker('event', 'clickEvent', 'JAM Particle Quiz', quizKey($(this).closest('div.ab_quiz')), 'End');  // 퀴즈 완료 시
+                // } catch (e) {
+                //     console.log(e);
+                // }
+                event.preventDefault();
+            });
+        };
+
+        var quizKey = function(div) {
+            return div.data('nid');
+        };
+
+        //시작버튼 클릭
+        $('div.ab_quiz').find('.quiz_start_btn').off().on('click', function (event) {
+
+            function pad(num) {
+                num = num + '';
+                return num.length < 2 ? '0' + num : num;
+            }
+
+            var $quizDiv = $(this).closest('div.ab_quiz');
+
+            $(this).closest('div.quiz_start_screen').hide();
+            var $quizQuestion = $quizDiv.find('.quiz_question_screen');
+            var quizCnt = $quizQuestion.length;
+
+            $(this).closest('div.ab_quiz').data('quizcnt', quizCnt);
+
+            $.each($quizQuestion, function (i, item) {
+
+                $(item).find('.quiz_counter').html('<em>' + pad(i + 1) + '</em> / ' + pad(quizCnt));
+
+                if (i == (quizCnt - 1)) {
+                    var $lastBtn = $(item).find('.quiz_next_btn');
+                    $lastBtn.html('결과보기');
+                    $lastBtn.unbind("click");
+                    $lastBtn.addClass('quiz_finish_btn');
+
+                    finish();
+                }
+            });
+            // try {
+            //     jatracker('event', 'clickEvent', 'JAM Particle Quiz', quizKey($(this).closest('div.ab_quiz')), 'Start'); // 퀴즈 시작 시
+            // } catch (e) {
+            //     console.log(e);
+            // }
+            event.preventDefault();
+        });
+
+        function findTextNode (obj) {
+            return obj.filter(function () {return this.nodeType === 3;}).text();
+        }
+
+        $('ul.quiz_answer').find('a').off().on('click', function (event) {
+
+            var result = $(this).closest('li').find('.result').html();
+            var $quizQuestionScreen = $(this).closest('div.quiz_question_screen');
+
+            if ($quizQuestionScreen.data('selected') === 'N') {
+                $quizQuestionScreen.removeClass('quiz_correct_state');
+                $quizQuestionScreen.removeClass('quiz_incorrect_state');
+                $quizQuestionScreen.addClass(result == 'Y' ? 'quiz_correct_state' : 'quiz_incorrect_state');
+                $quizQuestionScreen.data('selected', 'Y');
+
+                if (0 == $quizQuestionScreen.index($quizQuestionScreen.closest('div.ab_quiz').find('div.quiz_question_screen'))) {
+                    $quizQuestionScreen.find('.quiz_previous_btn').hide();
+                }
+
+                $(this).addClass(result == 'Y' ? 'correct' : 'incorrect');
+                if (result == 'N') {
+                    $.each($(this).closest('.quiz_answer').find('li'), function (i, item) {
+                        if ($(item).find('.result').html() == 'Y') {
+                            $(item).find('a').addClass('correct');
+                        }
+                    });
+                }
+
+                var explain = $.trim(findTextNode($quizQuestionScreen.find('.quiz_response').contents())).length;
+                if (explain == 0) {
+                    var quizQuestion = findTextNode($quizQuestionScreen.find('.quiz_question').contents());
+                    $quizQuestionScreen.find('.quiz_response').find('span').eq(1).after(quizQuestion);
+                }
+
+                var beforeResult = $(this).closest('div.ab_quiz').data('quizresult');
+                if (beforeResult.length > 0) {
+                    result = beforeResult + ','+result;
+                }
+                $(this).closest('div.ab_quiz').data('quizresult', result);
+            }
+            event.preventDefault();
+        });
+
+        $('div.ab_quiz').find('.quiz_previous_btn').off().on('click', function (event) {
+            $(this).closest('div.quiz_question_screen').prev('div.quiz_question_screen').show();
+            event.preventDefault();
+        });
+
+        $('div.ab_quiz').find('.quiz_next_btn').off().on('click', function (event) {
+            $(this).closest('div.quiz_question_screen').hide();
+            event.preventDefault();
+        });
+
+        //다시풀기
+        $('div.ab_quiz').find('.quiz_restart_btn').closest('.quiz_control').off().on('click', function (event) {
+            var key = quizKey($(this).closest('div.ab_quiz'));
+            var $resetQuizDiv = $('div.ab_quiz[data-nid="' + key + '"]');
+            $resetQuizDiv.find('.quiz_start_screen').show();
+            $resetQuizDiv.find('.quiz_question_screen').show();
+            $resetQuizDiv.find('.quiz_question_screen').removeClass('quiz_correct_state');
+            $resetQuizDiv.find('.quiz_question_screen').removeClass('quiz_incorrect_state');
+            $resetQuizDiv.find('.quiz_question_screen').data('selected', 'N');
+            $resetQuizDiv.find('.quiz_answer').find('a').removeClass('correct');
+            $resetQuizDiv.find('.quiz_answer').find('a').removeClass('incorrect');
+            $resetQuizDiv.find('.quiz_result_screen').removeClass('quiz_grade_a');
+            $resetQuizDiv.find('.quiz_result_screen').removeClass('quiz_grade_b');
+            $resetQuizDiv.find('.quiz_result_screen').removeClass('quiz_grade_c');
+            $resetQuizDiv.find('.quiz_result_screen').removeClass('quiz_grade');
+            $resetQuizDiv.data('quizresult', '');
+            $resetQuizDiv.data('quizcnt', 0);
+
+            event.preventDefault();
+        });
+        $('div.ab_quiz').find('.quiz_share_btn').off().on('click', function (event) {
+            // console.log('공유하기');
+            event.preventDefault();
+        });
+
+    };
+
+})(jQuery, window, document);

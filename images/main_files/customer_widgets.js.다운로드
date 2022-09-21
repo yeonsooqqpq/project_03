@@ -1,0 +1,632 @@
+var wdgt = {
+  firstName: ''
+  ,lastName : ''
+  ,email : ''
+  ,phoneNumber : ''
+
+};
+
+function widgets_load(){
+  $.getScript( "/resources/js/src/widgets/js/cxw_i18n.js" )
+  .done(function( script, textStatus ) {
+    console.log( textStatus );
+    $.getScript( "/resources/js/src/widgets/js/showdown.min.js" )
+      .done(function( script, textStatus ) {
+        console.log( textStatus );
+          cxw_init();
+      })
+      .fail(function( jqxhr, settings, exception ) {
+        $( "div.log" ).text( "Triggered ajaxError handler." );
+    });
+  })
+  .fail(function( jqxhr, settings, exception ) {
+    $( "div.log" ).text( "Triggered ajaxError handler." );
+});
+
+
+}
+
+
+function cxw_init(){
+  console.log('[CXW] init');
+  var disableWebSockets=false;
+  var _demoHost = 'https://omni.bizmeka.com'; // https://omni.bizmeka.com/genesys/2/chat.jadaily,"https://POD.live.genesys.com";
+  console.log("---------WebSiteUrl:"+_demoHost+"---------------");
+  var gweBaseUrl = _demoHost.substr(0,_demoHost.indexOf('.'))+'-gwe'+_demoHost.substr(_demoHost.indexOf('.')); // "https://POD-gwe.live.genesys.com";
+  var gksBaseUrl = _demoHost.substr(0,_demoHost.indexOf('.'))+'-gkcsrv'+_demoHost.substr(_demoHost.indexOf('.')); // "https://POD-gkcsrv.live.genesys.com";
+  var vidyoBaseUrl = _demoHost.substr(0,_demoHost.indexOf('.'))+'-vidyo'+_demoHost.substr(_demoHost.indexOf('.'));  // "https://POD-vidyo.live.genesys.com";
+  var cobrowseBaseUrl = _demoHost.substr(0,_demoHost.indexOf('.'))+'-cobrowse'+_demoHost.substr(_demoHost.indexOf('.')); // "https://POD-cobrowse.live.genesys.com";
+  var enableCheckVidyo=false;
+
+  var CXW_THEME = "dark"; //light
+  var CXW_ENABLED = true;
+  var CXW_MESSAGE_BTN = false;
+  var CXW_CHAT_BTN = false;
+  var CXW_GKC_ENABLED = false;
+  var CXW_IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  var cx_converter = new showdown.Converter();
+
+  // (location.href.indexOf('search') > 0 || location.href.indexOf('carLoanResults') > 0 ) {
+  if (location.href.indexOf('mobile.jsp') > 0) {
+      CXW_ENABLED=false;
+  }
+
+  var widgetCX = (function(){
+      //var DEFAULT_SERVICE = "customer-support";
+      var CHATBOT_SERVICE = "bot";
+      var CHAT_URL =  'https://omni.bizmeka.com/genesys/2/chat.jadaily';
+      var STR_LOCALE = "ko-KR";//"en-US";
+
+      var oPublished = {};
+      var oWebChatControl = {};
+      var oChatConfig = {
+
+          //transport:  "gms",
+          //dataURL:    CHAT_URL + DEFAULT_SERVICE,
+          dataURL:    CHAT_URL,
+          userData: {
+                        "pfs_id": ''
+                      , "demoID": ''
+                      , "_data_id_wiz": "-remove-"
+                      , "firstName": wdgt.firstName
+                      , "lastName": wdgt.lastName
+                      , "email": wdgt.email
+                      , "phoneNumber": wdgt.phoneNumber
+                  },
+    emojis: true,
+    actionsMenu: true,
+          proactive: {
+              enabled: false, // enable or disable
+              idleTimer: 10,   // number of seconds of idle time before showing invite
+              cancelTimer: 30 // number of seconds before invite auto-closes
+          },
+    chatButton: {
+
+        enabled: CXW_ENABLED && CXW_CHAT_BTN,
+        template: false,
+//				template: '<div>CHAT NOW</div>',
+        openDelay: 100,
+        effectDuration: 200,
+        hideDuringInvite: true
+    }
+      };
+
+      if(!window._genesys){
+          window._genesys = {widgets: {}};
+      }
+
+  window._genesys.widgets = {
+    main: {
+              plugins: [
+                  "cx-sidebar",
+                  "cx-channel-selector",
+                  "cx-webchat",
+                  "cx-webchat-service",
+                  "cx-send-message",
+                  "cx-send-message-service",
+                  "cx-gwe",
+                  "cx-cobrowse",
+                  "cx-calendar",
+                  //"cx-search",
+                  //"cx-knowledge-center-service",
+                  //"cx-chat-deflection",
+                  //"cx-gwe",
+                  "cx-callback-service",
+                  "cx-stats-service",
+                  "cx-callback",
+                  //"cx-appointment",
+                  //"cx-offers",
+                  //"cx-preferences",
+                  "cx-call-us"
+              ],
+              mobileMode: "auto",
+              mobileModeBreakpoint: 600,
+              theme: CXW_THEME,
+              lang: STR_LOCALE,
+              i18n: cxw_i18n,
+      debug: true
+    },
+          gwe: {
+              debug : true,
+              httpEndpoint: gweBaseUrl,
+              httpsEndpoint: gweBaseUrl,
+              dslResource: gweBaseUrl + "/frontend/resources/dsl/domain-model.xml",
+              disableWebSockets: disableWebSockets
+          },
+          cobrowse: {
+              src: cobrowseBaseUrl + "/cobrowse/js/gcb.min.js",
+              url: cobrowseBaseUrl + "/cobrowse"
+          },
+          callback: {
+              dataURL: _demoHost+ '/genesys/1/service/callback/Callback_BS',
+              callDirection: 'USERTERMINATED',
+              //formValidation: false,
+              userData: {
+                  FirstName: wdgt.firstName,//'<c:out value="${customer_fname}" />',
+                  LastName: wdgt.lastName,//'<c:out value="${customer_lname}" />',
+                  customerNumber:wdgt.phoneNumber,//'<c:out value="${customer_phone}" />',
+                  _phone_number:wdgt.phoneNumber,//'<c:out value="${customer_phone}" />',
+                  PFS_id:wdgt.phoneNumber,// '<c:out value="${customer_phone}" />',
+                  _callback_phone_number:wdgt.phoneNumber,// '<c:out value="${customer_phone}" />',
+                  _customername: wdgt.lastName+wdgt.firstName,//'<c:out value="${customer_fname}" />' + ' ' + '<c:out value="${customer_lname}" />',
+                  _callback: 'true',
+                  _xtemplate: 'gbank',
+                  _app_name: 'Genesys',
+                  Config_Type: 'demosrv',
+                  subject: "GBank Callback",
+                  waitForAgent: 'true',
+                  waitForUserConfirm: 'false',
+                  _target:wdgt.phoneNumber, //('<%=application.getInitParameter("TmConfigType")%>' == 'gdemo')? '?:<c:out value="${customer_phone}" /> >0': '?:Customer_Service >=1',
+                  Base_Url: _demoHost,
+                  _call_direction: 'USERTERMINATED',
+                  _wait_for_agent: true,
+                  _wait_for_user_confirm: true,
+                  _media_type: 'voice'
+              },
+              countryCodes: false
+              //apikey : "m6gLKXREBMOK8VAlygOHHLLn3eNkgYjG"
+          },
+          calendar: {
+              showAvailability: true,
+              numberOfDays: 5,
+              calenderHours: {
+                  interval: 10, //min
+                  morning: {
+                      openTime: '09:00',
+                      closeTime: '11:59'
+                  },
+                  afternoon: {
+                      openTime: '12:00',
+                      closeTime: '16:59'
+                  },
+                  evening: {
+                      openTime: '17:00',
+                      closeTime: '23:59'
+                  }
+              }
+          },
+          callus: {
+              contacts: [
+                  {
+                      displayName: "연락정보",
+                      i18n: "Number001",
+                      number: ""
+                  },
+                  {
+                      displayName: "",
+                      i18n: "Number001",
+                      number: "<%=inboundPhoneNumber%>"
+                  }
+/*                    ,
+                  {
+                      displayName: "France",
+                      i18n: "Number002",
+                      number: "(33) 182887470"
+                  },
+                  {
+                      displayName: "Mexico",
+                      i18n: "Number003",
+                      number: "(52) 5541613437"
+                  },
+                  {
+                      displayName: "Japan",
+                      i18n: "Number002",
+                      number: "(81) 345790365"
+                  },
+                  {
+                      displayName: "Italy",
+                      i18n: "Number002",
+                      number: "(39) 0694803134"
+                  },
+                  {
+                      displayName: "Australia",
+                      i18n: "Number002",
+                      number: "(61) 280152362"
+                  },
+                  {
+                      displayName: "UK",
+                      i18n: "Number002",
+                      number: "(44) 2036081907"
+                  }
+*/
+              ],
+              hours: [
+                  "오전 9시 - 오후 4시 월 - 금"
+              ]
+          },
+          knowledgecenter: {
+              host: gksBaseUrl+'/gks-server/v1',
+              knowledgebases: ['gbank'],
+              lang: 'en',
+              media: '',
+              maxTrendingResults: 5,
+              maxSearchResults: 3,
+              apiClientId: 'web1',
+              apiClientMediaType: 'selfservice1',
+
+              deflection: {
+                  maxRephrased: -1,
+                  agentTranscript: 'readable',
+                  customerIdToken: 'email' // firstname | lastname | email
+              },
+
+              search : {
+                  SearchButton : {
+                      enabled: false
+                  }
+              }
+          },
+          webchat: oChatConfig,
+          sendmessage: {
+              //dataURL: location.protocol + "//" + location.host + "/gms_port_8010/genesys/2/email",
+               //dataURL: location.protocol + "//14.63.194.93:8081/demosrv.genesyslab.com/gms_port_8010/genesys/2/email",
+                dataURL:"https://omni.bizmeka.com/genesys/2/email/request-HD",//"//211.251.236.208:6080/genesys/2/email",
+      apikey: "",
+      SendMessageButton: {
+          enabled: CXW_ENABLED && CXW_MESSAGE_BTN
+      }
+      }
+  };
+
+      // enabling GKC & Chat deflection
+      if (CXW_GKC_ENABLED) {
+          window._genesys.widgets.main.plugins.push("cx-knowledge-center-service");
+          window._genesys.widgets.main.plugins.push("cx-chat-deflection");
+      }
+
+      // Stats
+      window._genesys.widgets.stats = {
+          ajaxTimeout: 3000,
+          ewt: {
+              //dataURL: _demoHost + '/genesys/1/service/ewt-for-vq'
+                dataURL: 'https://omni.bizmeka.com/genesys/1/service/ewt-for-vq?name=3100_SW_Voice'//'http://211.251.236.208:6080/genesys/1/service/ewt-for-vq?name=3100_SW_Voice'
+              //apikey: 'n3eNkgLLgLKXREBMYjGm6lygOHHOK8VA'
+          }
+      };
+
+      // Live person
+      window._genesys.widgets.channelselector = {
+
+          ewtRefreshInterval: 10,
+
+          channels: [
+              // {
+              // enable: true,
+              // clickCommand: 'CallUs.open',
+              // readyEvent: 'CallUs.ready',
+              // displayName: '무료전화',
+              // i18n: 'CallusTitle',
+              // icon: 'call-outgoing',
+              // ewt: {
+              //     display: true,
+              //     queue: 'NewCustomer_MM',
+              //     availabilityThresholdMin: 10,
+              //     availabilityThresholdMax: 480,
+              //     hideChannelWhenThresholdMax: false
+              //     }
+              // }
+              // ,
+              // {
+              // enable: false,
+              // clickCommand: 'WebChat.open',
+              // readyEvent: 'WebChat.ready',
+              // displayName: '챗봇',
+              // i18n: 'ChatTitle2',
+              // icon: 'chat',
+              // ewt: {
+              //     display: true,
+              //     queue: 'Omnichannel',
+              //     availabilityThresholdMin: 30,
+              //     availabilityThresholdMax: 480,
+              //     hideChannelWhenThresholdMax: false
+              //     }
+              // }
+              //,
+              {
+              enable: true,
+              clickCommand: 'WebChat.open',
+              readyEvent: 'WebChat.ready',
+              displayName: '채팅',
+              i18n: 'ChatTitle',
+              icon: 'avatar-agent',
+              ewt: {
+                  display: true,
+                  queue: 'Omnichannel',
+                  availabilityThresholdMin: 30,
+                  availabilityThresholdMax: 480,
+                  hideChannelWhenThresholdMax: false
+                  }
+              },
+            //   {
+            //   enable: true,
+            //   clickCommand: 'SendMessage.open',
+            //   readyEvent: 'SendMessage.ready',
+            //   displayName: 'E-Mail전송',
+            //   i18n: 'EmailTitle',
+            //   icon: 'email',
+            //   ewt: {
+            //       display: true,
+            //       queue: 'Omnichannel0',
+            //       availabilityThresholdMin: 3000,
+            //       availabilityThresholdMax: 4800,
+            //       hideChannelWhenThresholdMax: false
+            //       }
+            //   },
+            //   {
+            //   enable: true,
+            //   clickCommand: 'Callback.open',
+            //   readyEvent: 'Callback.ready',
+            //   displayName: '콜백',
+            //   i18n: 'CallbackTitle',
+            //   icon: 'call-incoming',
+            //   html: '',
+            //   ewt: {
+            //       display: true,
+            //       queue: 'Omnichannel0',
+            //       availabilityThresholdMin: 300,
+            //       availabilityThresholdMax: 480,
+            //       hideChannelWhenThresholdMax: false
+            //       }
+            //   }
+          ]
+      };
+
+      if (enableCheckVidyo && !CXW_IS_MOBILE) {  // vidyo only for desktops
+          window._genesys.widgets.channelselector.channels.push(
+              {
+              enable: true,
+              clickCommand: 'Vidyo.open',
+              readyEvent: 'Vidyo.ready',
+              displayName: 'Video Chat',
+              i18n: 'VideoTitle',
+              icon: 'video',
+              ewt: {
+                  display: true,
+                  queue: 'Omnichannel',
+                  availabilityThresholdMin: 300,
+                  availabilityThresholdMax: 480,
+                  hideChannelWhenThresholdMax: false
+                  }
+              }
+          );
+      }
+
+
+      window._genesys.widgets.onReady = function(oCXBus){
+          console.log('[CXW] Widget bus has been initialized!');
+          var oWCC = oCXBus;
+          // adding GWE IDs
+          _gt.push(['getIDs', function(IDs) {
+              console.log('[CXW] GWE IDs: ', JSON.stringify(IDs)); // getting GWE IDs
+              $.extend(oChatConfig.userData, IDs);
+              oWCC.command("WebChatService.configure", {"userData": oChatConfig.userData});
+          }]);
+
+
+          oWCC.command("WebChatService.registerPreProcessor", {preprocessor: function(oMessage){
+
+                // Receive each chat message JSON as "oMessage"
+                // Modify oMessage https://genesys.api.vidyocloud.com/flex.html?roomdirect.html&key=P1TvDysakk
+
+                if (oMessage.text && (oMessage.text.indexOf("Message:https://genesys.api.vidyocloud.com") == 0 ||
+                                      oMessage.text.indexOf("Message:http://Genesys.sandboxga.vidyo.com") == 0)) {
+                    oMessage.html = true;
+                    var ref = oMessage.text.substr(43);
+                    if (! CXW_IS_MOBILE && oMessage.text.indexOf("Message:https://genesys.api.vidyocloud.com") == 0) {
+                        oMessage.text = 'Please press button to start video:<br><br><button type="button" class="btn btn-primary i18n" onclick="widgetCX.startVidyo(&quot;' + ref + '&quot;);">Start video</button>';
+                    }
+                    else if(! CXW_IS_MOBILE) { // sandbox portal
+                        oMessage.text = 'Please press button to start video:<br><br><button type="button" class="btn btn-primary i18n" onclick="widgetCX.startVidyoSandbox(&quot;' + ref + '&quot;);">Start video</button>';
+                    }
+                    else if(CXW_IS_MOBILE) {
+                        oMessage.text = '***Video is not supported in mobile device browsers***';
+                        oMessage.html = true;
+                        oMessage.text = cx_converter.makeHtml(oMessage.text);
+                    }
+                }
+                else if(oMessage.text == "Message:EndVidyoRequest") {
+                    oMessage.text = 'Video session is closed';
+                }
+                else if(oMessage.from.type == 'Agent' && oMessage.type == "PushUrl" && oMessage.text) {
+                    window.open(oMessage.text, '_blank');
+                }
+                else if(oMessage.from.type == 'Agent' && oMessage.text) {
+                    oMessage.html = true;
+                    oMessage.text = cx_converter.makeHtml(oMessage.text);
+                }
+
+                //console.log(JSON.stringify(oMessage, null, 4));
+
+                // Return it back to webchat
+                return oMessage;
+              }
+          });
+      };
+
+      if(!window._genesys.widgets.extensions){
+          window._genesys.widgets.extensions = {};
+      }
+
+      window._genesys.widgets.extensions["Vidyo"] = function($, CXBus, Common){
+
+          var oVidyo = CXBus.registerPlugin("Vidyo");
+
+          oVidyo.subscribe("Vidyo.opened", function(e){});
+
+          oVidyo.republish("ready");
+
+          oVidyo.registerCommand("open", function(e){
+              initGV();
+          });
+
+/*
+       oVidyo.command("Vidyo.open").done(function(e){
+              alert('OPEN');
+          }).fail(function(e){
+          });
+*/
+          //oVidyo.registerCommand("demo", function(e){
+          //});
+      };
+
+      var oWCC = null;
+  var _activation = function(){
+          console.log('[CXW] plugin initializing...');
+    if (window._genesys.widgets.bus) {
+      oWCC = window._genesys.widgets.bus; //.registerPlugin("WebChatControl");
+
+/*
+              oWCC.command("SideBar.addButton", {
+                  button: {
+                          name: cxw_i18n[locale].webchat.ChatTitle,
+                          icon: "cx-img-map epicchat",
+                          class: "cx-test-button"
+                          }
+                  })
+                  .done(function(e){};
+*/
+          // prefilling
+      oWCC.subscribe("cx.plugin.Callback.opened", function(){
+        _setFooter();
+        _prefillForm();
+        _sidebarHide();
+      });
+
+      oWCC.subscribe("cx.plugin.WebChat.opened", function(){
+        console.log("opened!!!!!!!!!!");
+        _setFooter();
+        _prefillForm();
+        _sidebarHide();
+        console.log(displayName);
+        // $('.cx-widget').css('border','2px solid red;');
+        if(displayName == '챗봇'){
+          console.log("챗봇");
+            $('.cx-webchat').css("border",'3px solid #bf0a0a');
+            $('.cx-webchat').css('box-shadow','0 0 21px 2px rgba(114, 23, 23, 0.76)');
+        }
+
+                  if (location.href.indexOf('carLoanResult') > 0) oWCC.command("cx.plugin.ChatDeflection.disable");
+                  else oWCC.command("cx.plugin.ChatDeflection.enable");
+
+
+      });
+
+      oWCC.subscribe("cx.plugin.SendMessage.opened", function(){
+        _setFooter();
+        _prefillForm();
+        _sidebarHide();
+      });
+
+
+      console.log('[CXW] The plugin is registered');
+    }
+    else {
+      setTimeout(function(){widgetCX.activation();}, 200);
+    }
+  };
+
+      var _sidebarShow = function () {
+          //oWCC.command("cx.plugin.CXSideBar.open");
+          //console.log("[CXW] The sidebar is shown");
+      };
+
+      var _sidebarHide = function () {
+          //$(".cx-sidebar").hide(200);
+          //oWCC.command("cx.plugin.CXSideBar.close");
+          console.log("[CXW] The sidebar is hidden");
+      };
+
+      var _prefillForm = function () {
+          console.log('[CXW] prefilling the form');
+          // custom form prefill
+          $("#cx_webchat_form_firstname, #cx_firstname, #cx_sendmessage_form_firstname, #cx_form_callback_firstname").val(oChatConfig.userData.firstName);
+          $("#cx_webchat_form_lastname, #cx_lastname, #cx_sendmessage_form_lastname, #cx_form_callback_lastname").val(oChatConfig.userData.lastName);
+          $("#cx_webchat_form_email, #cx_sendmessage_from, #cx_sendmessage_form_email, #cx_form_callback_email").val(oChatConfig.userData.email);
+          $("#cx_form_callback_phone_number").val(oChatConfig.userData.phoneNumber);
+          $("#cx_form_callback_subject").val("콜백 요청");
+          $("#cx_webchat_form_subject").val("채팅 요청");
+          $("#cx_sendmessage_subject, #cx_sendmessage_form_subject").val("");
+      };
+
+      var _setFooter = function () {
+          // $(".cx-powered-by").html("<img src='http://epic-tm.live.genesys.com/iisEpic/cxw/logo.png'></img>");
+      };
+
+      var _openChat = function(){
+
+          if (! window._genesys.widgets.bus) {
+              return; // not inited yet
+          }
+
+          var uData = {"_template": "GBank"};
+          if (typeof additionalData != 'undefined') {
+              uData = additionalData;
+          }
+
+    uData = $.extend(uData, oChatConfig.userData);
+    console.log(uData);
+    oWCC.command("cx.plugin.WebChat.open", {"userData": uData});
+
+      };
+
+      var _openChannelSelector = function(){
+        oWCC.command("cx.plugin.ChannelSelector.open");
+      };
+    var _generateVidyoFrameSrc = function(guestLink){
+      var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      var vidyoSrc = "";
+      var webRtcUrl = "https://apps.vidyocloud.com/ve4genesys/simple/index.html";
+      var vidyoWebUrl = "https://apps.vidyocloud.com/ve4genesys/dual/index.html";
+      var vidUrl = isChrome? webRtcUrl: vidyoWebUrl;
+      var firstName = "${first_name}".length == 0? "Customer": "${first_name}";
+
+      vidyoSrc =
+          webRtcUrl + "?portalUri=" +
+          guestLink.replace('?', '&') + "&guestName=" + firstName;
+
+      return vidyoSrc;
+    }
+
+     // public interface
+    oPublished = {
+          generateVidyoFrameSrc: _generateVidyoFrameSrc,
+          activation: _activation,
+          openChat: _openChat,
+          openChannelSelector:_openChannelSelector,
+          setCustomData: function (udata) {
+              oChatConfig.userData = $.extend(true, {}, udata);
+          },
+          startVidyo: function(url){
+            setTimeout(function(){
+              window.open(widgetCX.generateVidyoFrameSrc("https://genesys.api.vidyocloud.com&" + url), '_blank', "height=600, width=800, top=300, left=300, scrollbars=0")
+            }, 200);
+/*                  window._genesys.widgets.bus.command("Overlay.open", {html: '<strong>YAHOO!!!</strong>', immutable: true})
+                .fail(function(text){console.log('FAIL - ' +text);})
+                .done(function(text){console.log('DONE - ' +text);}); */
+          },
+          startVidyoSandbox: function(url){window.open("http://Genesys.sandboxga.vidyo.com" + url, '_blank')}
+      };
+
+      return oPublished;
+
+  })();
+
+  console.log('[CXW] init done');
+
+  var startChatSession = widgetCX.openChat;
+
+  if (CXW_ENABLED) {
+      var widget_path = 'src/widgets/js/';
+      (function(d, s, id, o){var f = function(){var fs = d.getElementsByTagName(s)[0], e;
+          if (d.getElementById(id)) return;e = d.createElement(s);
+          e.id = id;e.src = o.src;fs.parentNode.insertBefore(e, fs);},ol = window.onload;
+
+      if(o.onload){typeof window.onload != "function"?window.onload=f:window.onload=function(){ol();f();widgetCX.activation();}}else {f();widgetCX.activation();};})
+
+                  //		typeof window.onload !="function"?window.onload=f:window.onload=function(){ol();f();widgetCX.activation();}})
+      // (document,'script','genesys-cx-widget', {src: widget_path + "widgets.min.719.js"});
+      (document,'script','genesys-cx-widget', {src: widget_path + "widgets.js"});
+
+
+  }
+}
